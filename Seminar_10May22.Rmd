@@ -3,13 +3,15 @@ title: "Seminar_10May22"
 author: "Tesswin Thomas"
 date: "5/10/2022"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Pricing seminar 
+## Pricing seminar 10 May 22 : Conjoint analysys
 
 ```{r github}
 
@@ -25,5 +27,72 @@ use_git_config(user.name = "tesswin",
 
 use_github(protocol = "https", 
            auth_token = Sys.getenv("GITHUB_PAT"))
+
+```
+
+Conjoint analysis is about choices. The products, it characeteristics, and the level of its characterisitics - how to build these optimal characteristics. 
+
+- how many price levels to set 
+
+- right product at the right price
+
+- simple linear regression is the engine behind conjoint analysis
+
+
+```{r}
+install.packages("conjoint")
+library(conjoint)
+
+# expand.grid() to build a matrix with all levels of combinations 
+
+device <-  c("Apple", "Samsung")
+giga <- c("5gb", "10gb", "15gb", "100gb", "200gb")
+size <- c(1,2,3,4,5)
+price <- c(100,150,300,350,400,450)
+
+choices <- expand.grid("GB" = giga, 
+                       "Price" = price, 
+                       "Device" = device, 
+                       "size" = size)
+
+head(choices)
+
+profiles <- conjoint::caFactorialDesign(choices)
+
+coding <- caEncodedDesign(profiles)
+
+inspect <- cbind(profiles, coding)
+
+```
+
+
+
+### Leisure company
+```{r}
+
+levels_purpose <- c("cognitive", "vacation", "health", "somethingelse")
+levels_period <- c("winter", "summer")
+levels_form <- c("own","organized")
+levels_accomodation <- c("hotel", "hostel", "guesthouse")
+
+# all combinations are given by the function below 
+allChoices <- expand.grid("purpose" = levels_purpose, 
+                          "season" = levels_period, 
+                          "form" = levels_form, 
+                          "acc type" = levels_accomodation)
+
+# Optimal choices are given by the funcction below 
+Different_choices <- caFactorialDesign(data = allChoices, type = "fractional")
+
+
+# Need to encode these optimal choices now 
+prof <- caEncodedDesign(Different_choices)
+
+# now get the survey data in 
+# use it with function caPartUtilities()
+# Then use Conjoint() function
+# use caSegmentation() for clustering
+# from library fpc; fpc::plotcluster(segments$util, segments$sclu)
+
 
 ```
