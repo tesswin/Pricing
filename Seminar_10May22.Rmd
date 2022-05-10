@@ -1,0 +1,29 @@
+---
+title: "Seminar_10May22"
+author: "Tesswin Thomas"
+date: "5/10/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Pricing seminar 
+
+```{r github}
+
+# install.packages("usethis")
+
+library(usethis)
+edit_r_environ()
+
+use_git_config(user.name = "tesswin", 
+               user.email = "tesswin@gmail.com")
+
+# use commit before this 
+
+use_github(protocol = "https", 
+           auth_token = Sys.getenv("GITHUB_PAT"))
+
+```
